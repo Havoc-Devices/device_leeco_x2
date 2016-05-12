@@ -119,8 +119,7 @@ char const*const BLUE_BLINK_FILE
         = "/sys/class/leds/blue/blink";
 
 #define RAMP_SIZE 8
-static int BRIGHTNESS_RAMP[RAMP_SIZE]
-        = { 0, 12, 25, 37, 50, 72, 85, 100 };
+static int BRIGHTNESS_RAMP[RAMP_SIZE];
 #define RAMP_STEP_DURATION 50
 
 #define MAX_INPUT_BRIGHTNESS 255
@@ -208,6 +207,11 @@ write_str(char const* path, char* value)
 
 void init_globals(void)
 {
+    int i;
+
+    for (i = 0; i < RAMP_SIZE; i++)
+        BRIGHTNESS_RAMP[i] = 100 * i / (RAMP_SIZE - 1);
+
     // init the mutex
     pthread_mutex_init(&g_lock, NULL);
 }
